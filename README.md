@@ -20,3 +20,8 @@ It has the following functionality:
         3. Months
         4. Years
 
+## Language and APIs
+
+- Go language will be used
+- Official Whatsapp Business documentation will be used: [Whatsapp API Documentation](https://developers.facebook.com/documentation/business-messaging/whatsapp/overview)
+- Go's official SDK for google sheets will be used: [Google Sheets Go SDK](https://developers.google.com/workspace/sheets/api/quickstart/go)
