@@ -9,6 +9,18 @@ import (
 	"context"
 )
 
+const getLabelByName = `-- name: GetLabelByName :one
+SELECT id,name FROM labels
+WHERE name=$1
+`
+
+func (q *Queries) GetLabelByName(ctx context.Context, name string) (Label, error) {
+	row := q.db.QueryRowContext(ctx, getLabelByName, name)
+	var i Label
+	err := row.Scan(&i.ID, &i.Name)
+	return i, err
+}
+
 const getLabels = `-- name: GetLabels :many
 SELECT id,name FROM labels
 `
