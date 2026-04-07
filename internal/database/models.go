@@ -5,14 +5,12 @@
 package database
 
 import (
-	"database/sql"
-
 	"github.com/google/uuid"
 )
 
 type Label struct {
 	ID   uuid.UUID
-	Name sql.NullString
+	Name string
 }
 
 type Transaction struct {
