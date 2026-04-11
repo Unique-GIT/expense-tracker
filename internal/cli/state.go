@@ -7,6 +7,13 @@ type Command struct {
 	Arguments []string
 }
 
+func NewCommand(name string, arguments []string) *Command {
+	return &Command{
+		Name:      name,
+		Arguments: arguments,
+	}
+}
+
 // Config nad Getters
 type Config struct {
 	user string
