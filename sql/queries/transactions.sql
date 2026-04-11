@@ -9,3 +9,11 @@ VALUES(
     NOW()
 )
 RETURNING *;
+
+-- name: GetAnalysis :many
+SELECT l.labelName,SUM(t.cost) AS total_cost
+FROM transactions as t
+INNER JOIN labels as l
+ON l.id = t.label_id
+WHERE t.user_id = $1
+GROUP BY l.id;

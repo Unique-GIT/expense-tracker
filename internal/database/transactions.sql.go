@@ -49,3 +49,40 @@ func (q *Queries) AddTransaction(ctx context.Context, arg AddTransactionParams) 
 	)
 	return i, err
 }
+
+const getAnalysis = `-- name: GetAnalysis :many
+SELECT l.labelName,SUM(t.cost) AS total_cost
+FROM transactions as t
+INNER JOIN labels as l
+ON l.id = t.label_id
+WHERE t.user_id = $1
+GROUP BY l.id
+`
+
+type GetAnalysisRow struct {
+	Labelname string
+	TotalCost int64
+}
+
+func (q *Queries) GetAnalysis(ctx context.Context, userID uuid.UUID) ([]GetAnalysisRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAnalysis, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAnalysisRow
+	for rows.Next() {
+		var i GetAnalysisRow
+		if err := rows.Scan(&i.Labelname, &i.TotalCost); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
