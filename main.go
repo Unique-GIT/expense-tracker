@@ -32,6 +32,7 @@ func main() {
 	commandRegistry.Register("reset-users", cli.ResetUsers)
 	commandRegistry.Register("login", cli.LoginUser)
 	commandRegistry.Register("user", cli.GetCurrentUser)
+	commandRegistry.Register("add-label", cli.AddLabel)
 
 	arguments := os.Args
 	if len(arguments) < 2 {

@@ -43,7 +43,7 @@ func set_config(config Config) error {
 }
 
 func (c *Config) GetUser() string {
-	return c.User
+	return c.Number
 }
 
 func (c *Config) SetUser(name string, number string) error {
