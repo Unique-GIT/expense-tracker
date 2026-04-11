@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/Unique-GIT/expense-tracker/internal/database"
 	"github.com/Unique-GIT/expense-tracker/internal/utils"
@@ -14,6 +15,8 @@ func AddTransaction(s *State, cmd *Command) error {
 		return fmt.Errorf("Three Arguments are expected for adding Transactions: LabelName, Object Name and Cost")
 	}
 	labelName, object, cost := cmd.Arguments[0], cmd.Arguments[1], cmd.Arguments[2]
+	labelName = strings.ToLower(labelName)
+
 	floatingCost, err := utils.ParseFloat32(cost)
 	if err != nil {
 		return fmt.Errorf("Error parsing cost to floating point: %w", err)
