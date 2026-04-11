@@ -10,3 +10,7 @@ RETURNING *;
 -- name: GetLabels :many
 SELECT labelName FROM labels
 WHERE user_id = $1;
+
+-- name: GetLabelId :one
+SELECT id FROM labels
+WHERE user_id = $1 AND labelName = $2;

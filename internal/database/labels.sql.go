@@ -33,6 +33,23 @@ func (q *Queries) AddLabel(ctx context.Context, arg AddLabelParams) (Label, erro
 	return i, err
 }
 
+const getLabelId = `-- name: GetLabelId :one
+SELECT id FROM labels
+WHERE user_id = $1 AND labelName = $2
+`
+
+type GetLabelIdParams struct {
+	UserID    uuid.UUID
+	Labelname string
+}
+
+func (q *Queries) GetLabelId(ctx context.Context, arg GetLabelIdParams) (uuid.UUID, error) {
+	row := q.db.QueryRowContext(ctx, getLabelId, arg.UserID, arg.Labelname)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
+}
+
 const getLabels = `-- name: GetLabels :many
 SELECT labelName FROM labels
 WHERE user_id = $1
