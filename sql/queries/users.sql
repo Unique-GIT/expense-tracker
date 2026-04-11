@@ -6,3 +6,9 @@ VALUES(
     $2
 )
 RETURNING *;
+
+-- name: GetAllUsers :many
+SELECT * FROM users;
+
+-- name: ResetAllUsers :exec
+DELETE FROM users;

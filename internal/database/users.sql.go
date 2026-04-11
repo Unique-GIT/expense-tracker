@@ -30,3 +30,39 @@ func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (User, error) 
 	err := row.Scan(&i.ID, &i.Username, &i.Usernumber)
 	return i, err
 }
+
+const getAllUsers = `-- name: GetAllUsers :many
+SELECT id, username, usernumber FROM users
+`
+
+func (q *Queries) GetAllUsers(ctx context.Context) ([]User, error) {
+	rows, err := q.db.QueryContext(ctx, getAllUsers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []User
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(&i.ID, &i.Username, &i.Usernumber); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const resetAllUsers = `-- name: ResetAllUsers :exec
+DELETE FROM users
+`
+
+func (q *Queries) ResetAllUsers(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, resetAllUsers)
+	return err
+}
