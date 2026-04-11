@@ -21,7 +21,7 @@ RETURNING id, username, usernumber
 
 type AddUserParams struct {
 	Username   string
-	Usernumber int32
+	Usernumber string
 }
 
 func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (User, error) {

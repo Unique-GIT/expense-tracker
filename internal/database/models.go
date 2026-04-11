@@ -25,5 +25,5 @@ type Transaction struct {
 type User struct {
 	ID         uuid.UUID
 	Username   string
-	Usernumber int32
+	Usernumber string
 }

@@ -2,7 +2,7 @@
 CREATE TABLE users (
     id UUID PRIMARY KEY,
     userName TEXT NOT NULL,
-    userNumber INT NOT NULL UNIQUE
+    userNumber TEXT NOT NULL UNIQUE
 );
 
 -- +goose Down
