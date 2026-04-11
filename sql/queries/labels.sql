@@ -8,7 +8,7 @@ VALUES(
 RETURNING *;
 
 -- name: GetLabels :many
-SELECT labelName FROM labels
+SELECT labelName,id FROM labels
 WHERE user_id = $1;
 
 -- name: GetLabelId :one

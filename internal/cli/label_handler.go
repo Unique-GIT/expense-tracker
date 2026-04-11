@@ -60,7 +60,7 @@ func GetLabels(s *State, cmd *Command) error {
 
 	log.Printf("Labels fetched: \n")
 	for _, label := range labels {
-		log.Printf("%s \n", label)
+		log.Printf("%s \n", label.Labelname)
 	}
 
 	return nil

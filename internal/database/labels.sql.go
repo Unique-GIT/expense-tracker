@@ -51,23 +51,28 @@ func (q *Queries) GetLabelId(ctx context.Context, arg GetLabelIdParams) (uuid.UU
 }
 
 const getLabels = `-- name: GetLabels :many
-SELECT labelName FROM labels
+SELECT labelName,id FROM labels
 WHERE user_id = $1
 `
 
-func (q *Queries) GetLabels(ctx context.Context, userID uuid.UUID) ([]string, error) {
+type GetLabelsRow struct {
+	Labelname string
+	ID        uuid.UUID
+}
+
+func (q *Queries) GetLabels(ctx context.Context, userID uuid.UUID) ([]GetLabelsRow, error) {
 	rows, err := q.db.QueryContext(ctx, getLabels, userID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	var items []GetLabelsRow
 	for rows.Next() {
-		var labelname string
-		if err := rows.Scan(&labelname); err != nil {
+		var i GetLabelsRow
+		if err := rows.Scan(&i.Labelname, &i.ID); err != nil {
 			return nil, err
 		}
-		items = append(items, labelname)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
