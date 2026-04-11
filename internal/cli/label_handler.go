@@ -34,3 +34,31 @@ func AddLabel(s *State, cmd *Command) error {
 	log.Printf("Label-id: %s", label.ID)
 	return nil
 }
+
+func GetLabels(s *State, cmd *Command) error {
+	if len(cmd.Arguments) > 0 {
+		return fmt.Errorf("One Argument is expected for adding Label: LabelName")
+	}
+
+	// get user-number
+	userNumber := s.GetConfig().GetUser()
+
+	// get user-id
+	user, err := s.GetDb().GetUserByNumber(context.Background(), userNumber)
+	if err != nil {
+		return fmt.Errorf("Error getting user: %w", err)
+	}
+
+	// get labels
+	labels, err := s.GetDb().GetLabels(context.Background(), user.ID)
+	if err != nil {
+		return fmt.Errorf("Error Getting Labels: %w", err)
+	}
+
+	log.Printf("Labels fetched: \n")
+	for _, label := range labels {
+		log.Printf("%s \n", label)
+	}
+
+	return nil
+}

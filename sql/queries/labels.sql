@@ -6,3 +6,7 @@ VALUES(
     $2
 )
 RETURNING *;
+
+-- name: GetLabels :many
+SELECT labelName FROM labels
+WHERE user_id = $1;
