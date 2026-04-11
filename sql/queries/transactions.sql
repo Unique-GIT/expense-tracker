@@ -16,5 +16,9 @@ SELECT l.labelName,
 FROM transactions as t
 INNER JOIN labels as l
 ON l.id = t.label_id
-WHERE t.user_id = $1
+WHERE t.user_id = $1 
+    AND created_at >= NOW() 
+        - sqlc.arg(days)::int * INTERVAL '1 day'
+        - sqlc.arg(months)::int * INTERVAL '1 month'
+        - sqlc.arg(years)::int * INTERVAL '1 year'
 GROUP BY l.id;

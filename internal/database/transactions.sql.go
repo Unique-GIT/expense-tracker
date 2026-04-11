@@ -56,17 +56,33 @@ SELECT l.labelName,
 FROM transactions as t
 INNER JOIN labels as l
 ON l.id = t.label_id
-WHERE t.user_id = $1
+WHERE t.user_id = $1 
+    AND created_at >= NOW() 
+        - $2::int * INTERVAL '1 day'
+        - $3::int * INTERVAL '1 month'
+        - $4::int * INTERVAL '1 year'
 GROUP BY l.id
 `
+
+type GetAnalysisParams struct {
+	UserID uuid.UUID
+	Days   int32
+	Months int32
+	Years  int32
+}
 
 type GetAnalysisRow struct {
 	Labelname string
 	TotalCost float32
 }
 
-func (q *Queries) GetAnalysis(ctx context.Context, userID uuid.UUID) ([]GetAnalysisRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAnalysis, userID)
+func (q *Queries) GetAnalysis(ctx context.Context, arg GetAnalysisParams) ([]GetAnalysisRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAnalysis,
+		arg.UserID,
+		arg.Days,
+		arg.Months,
+		arg.Years,
+	)
 	if err != nil {
 		return nil, err
 	}
