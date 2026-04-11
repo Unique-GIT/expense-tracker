@@ -58,6 +58,18 @@ func (q *Queries) GetAllUsers(ctx context.Context) ([]User, error) {
 	return items, nil
 }
 
+const getUserByNumber = `-- name: GetUserByNumber :one
+SELECT id, username, usernumber FROM users
+WHERE userNumber = $1
+`
+
+func (q *Queries) GetUserByNumber(ctx context.Context, usernumber string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByNumber, usernumber)
+	var i User
+	err := row.Scan(&i.ID, &i.Username, &i.Usernumber)
+	return i, err
+}
+
 const resetAllUsers = `-- name: ResetAllUsers :exec
 DELETE FROM users
 `

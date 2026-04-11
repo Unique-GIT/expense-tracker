@@ -12,3 +12,7 @@ SELECT * FROM users;
 
 -- name: ResetAllUsers :exec
 DELETE FROM users;
+
+-- name: GetUserByNumber :one
+SELECT * FROM users
+WHERE userNumber = $1;
