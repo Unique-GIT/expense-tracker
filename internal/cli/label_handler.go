@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/Unique-GIT/expense-tracker/internal/database"
 )
@@ -12,6 +13,8 @@ func AddLabel(s *State, cmd *Command) error {
 	if len(cmd.Arguments) != 1 {
 		return fmt.Errorf("One Argument is expected for adding Label: LabelName")
 	}
+	labelName := cmd.Arguments[0]
+	labelName = strings.ToLower(labelName)
 
 	// get user-number
 	userNumber := s.GetConfig().GetUser()
@@ -24,7 +27,7 @@ func AddLabel(s *State, cmd *Command) error {
 
 	// add label
 	label, err := s.GetDb().AddLabel(context.Background(), database.AddLabelParams{
-		Labelname: cmd.Arguments[0],
+		Labelname: labelName,
 		UserID:    user.ID,
 	})
 
