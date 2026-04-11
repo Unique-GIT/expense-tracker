@@ -51,7 +51,8 @@ func (q *Queries) AddTransaction(ctx context.Context, arg AddTransactionParams) 
 }
 
 const getAnalysis = `-- name: GetAnalysis :many
-SELECT l.labelName,SUM(t.cost) AS total_cost
+SELECT l.labelName,
+    SUM(t.cost)::REAL AS total_cost
 FROM transactions as t
 INNER JOIN labels as l
 ON l.id = t.label_id
@@ -61,7 +62,7 @@ GROUP BY l.id
 
 type GetAnalysisRow struct {
 	Labelname string
-	TotalCost int64
+	TotalCost float32
 }
 
 func (q *Queries) GetAnalysis(ctx context.Context, userID uuid.UUID) ([]GetAnalysisRow, error) {

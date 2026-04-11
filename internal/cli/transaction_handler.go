@@ -58,3 +58,30 @@ func AddTransaction(s *State, cmd *Command) error {
 
 	return nil
 }
+
+func AnalyzeTransactions(s *State, cmd *Command) error {
+	if len(cmd.Arguments) > 0 {
+		return fmt.Errorf("No Arguments needed for Analyze Transactions")
+	}
+
+	userNumber := s.GetConfig().GetUser()
+
+	// get user-id
+	user, err := s.GetDb().GetUserByNumber(context.Background(), userNumber)
+	if err != nil {
+		return fmt.Errorf("Error getting user: %w", err)
+	}
+
+	// get Analysis
+	report, err := s.GetDb().GetAnalysis(context.Background(), user.ID)
+	if err != nil {
+		return fmt.Errorf("Error Getting Analysis: %w", err)
+	}
+
+	log.Printf("Analysis for the user: %s", userNumber)
+	for _, row := range report {
+		log.Printf("LabelName: %s TotalCost: %v \n", row.Labelname, row.TotalCost)
+	}
+
+	return nil
+}

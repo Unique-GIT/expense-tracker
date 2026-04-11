@@ -11,7 +11,8 @@ VALUES(
 RETURNING *;
 
 -- name: GetAnalysis :many
-SELECT l.labelName,SUM(t.cost) AS total_cost
+SELECT l.labelName,
+    SUM(t.cost)::REAL AS total_cost
 FROM transactions as t
 INNER JOIN labels as l
 ON l.id = t.label_id
