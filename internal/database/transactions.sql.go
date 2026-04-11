@@ -12,15 +12,16 @@ import (
 )
 
 const addTransaction = `-- name: AddTransaction :one
-INSERT INTO transactions(id,user_id,label_id,object_name,cost)
+INSERT INTO transactions(id,user_id,label_id,object_name,cost,created_at)
 VALUES(
     gen_random_uuid(),
     $1,
     $2,
     $3,
-    $4
+    $4,
+    NOW()
 )
-RETURNING id, user_id, label_id, object_name, cost
+RETURNING id, user_id, label_id, object_name, cost, created_at
 `
 
 type AddTransactionParams struct {
@@ -44,6 +45,7 @@ func (q *Queries) AddTransaction(ctx context.Context, arg AddTransactionParams) 
 		&i.LabelID,
 		&i.ObjectName,
 		&i.Cost,
+		&i.CreatedAt,
 	)
 	return i, err
 }

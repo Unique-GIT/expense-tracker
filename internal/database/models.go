@@ -5,6 +5,8 @@
 package database
 
 import (
+	"database/sql"
+
 	"github.com/google/uuid"
 )
 
@@ -20,6 +22,7 @@ type Transaction struct {
 	LabelID    uuid.UUID
 	ObjectName string
 	Cost       float32
+	CreatedAt  sql.NullTime
 }
 
 type User struct {
