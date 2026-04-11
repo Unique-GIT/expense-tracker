@@ -1,16 +1,5 @@
 # Idea 
 
-The idea behind this expense tracker is to have a way to add everyday purchases via a whatsapp bot itself
+There are a lot of applications that show Analysis for the money that one spends. I personally think, they have a lot of features that they expose and make it very hard to do some actual analysis.
 
-## The functionalities are pretty simple for v0 : 
-
-1) Add users
-2) Get / Add Labels per user
-3) Add transactions per user ( objectName, cost, Label )
-4) Analyze transactions per user ( past x days, y months, z years)
-
-## Functionalities to be added in v1: 
-
-1) Remove transactions by id 
-2) Remove Labels per user
-3) Downloadable report of Analyze function
+The idea is the very simple. Add transactions, given ech a label ( like a group name ) and then Analyzing it by Timeline, giving the total cost per label, as well as a percentage to the total
