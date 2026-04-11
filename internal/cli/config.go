@@ -29,6 +29,19 @@ func load_config() (Config, error) {
 	return config, nil
 }
 
+func set_config(config Config) error {
+	file, err := os.OpenFile(DEFAULT_CONFIG_PATH, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		return fmt.Errorf("Error opening file: %w", err)
+	}
+
+	if err = json.NewEncoder(file).Encode(config); err != nil {
+		return fmt.Errorf("Error Encoding config: %w", err)
+	}
+
+	return nil
+}
+
 func (c *Config) GetUser() string {
 	return c.User
 }
@@ -36,6 +49,16 @@ func (c *Config) GetUser() string {
 func (c *Config) SetUser(name string, number string) error {
 	c.User = name
 	c.Number = number
+
+	config := Config{
+		User:   c.User,
+		Number: c.Number,
+	}
+
+	if err := set_config(config); err != nil {
+		return fmt.Errorf("Error Setting User: %w", err)
+	}
+
 	return nil
 }
 
