@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/google/uuid"
 )
@@ -91,6 +92,51 @@ func (q *Queries) GetAnalysis(ctx context.Context, arg GetAnalysisParams) ([]Get
 	for rows.Next() {
 		var i GetAnalysisRow
 		if err := rows.Scan(&i.Labelname, &i.TotalCost); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getTransactions = `-- name: GetTransactions :many
+SELECT t.id,l.labelName,t.object_name,t.cost,t.created_at
+FROM transactions as t
+INNER JOIN labels as l
+on l.id = t.label_id
+WHERE t.user_id = $1
+`
+
+type GetTransactionsRow struct {
+	ID         uuid.UUID
+	Labelname  string
+	ObjectName string
+	Cost       float32
+	CreatedAt  sql.NullTime
+}
+
+func (q *Queries) GetTransactions(ctx context.Context, userID uuid.UUID) ([]GetTransactionsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getTransactions, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetTransactionsRow
+	for rows.Next() {
+		var i GetTransactionsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Labelname,
+			&i.ObjectName,
+			&i.Cost,
+			&i.CreatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
