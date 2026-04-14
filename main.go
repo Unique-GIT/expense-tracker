@@ -35,6 +35,7 @@ func main() {
 	commandRegistry.Register("add-label", cli.AddLabel)
 	commandRegistry.Register("get-labels", cli.GetLabels)
 	commandRegistry.Register("add-transaction", cli.AddTransaction)
+	commandRegistry.Register("get-transactions", cli.GetTransactions)
 	commandRegistry.Register("analyze", cli.AnalyzeTransactions)
 
 	arguments := os.Args

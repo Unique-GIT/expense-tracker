@@ -105,3 +105,32 @@ func AnalyzeTransactions(s *State, cmd *Command) error {
 
 	return nil
 }
+
+func GetTransactions(s *State, cmd *Command) error {
+	if len(cmd.Arguments) != 0 {
+		return fmt.Errorf("No Arguments needed for Getting Transactions ")
+	}
+	userNumber := s.GetConfig().GetUser()
+
+	// get user-id
+	user, err := s.GetDb().GetUserByNumber(context.Background(), userNumber)
+	if err != nil {
+		return fmt.Errorf("Error getting user: %w", err)
+	}
+
+	transactions, err := s.GetDb().GetTransactions(context.Background(), user.ID)
+	if err != nil {
+		return fmt.Errorf("Error getting Transactions: %w", err)
+	}
+
+	log.Printf("Transactions Fetched: \n")
+	for _, transaction := range transactions {
+		log.Printf("Transaction Id: %s ,Object: %s,LabelName: %s,Cost:  %f \n",
+			transaction.ID,
+			transaction.ObjectName,
+			transaction.Labelname,
+			transaction.Cost)
+	}
+
+	return nil
+}
